@@ -1,0 +1,20 @@
+http:
+  routers:
+    ping_router:
+      rule: Host(`localhost`) && Path(`/ping`)
+      service: ping@internal
+      entryPoints:
+        - dashboard
+    dashboard_router:
+      rule: Host(`localhost`)
+      service: api@internal
+      entryPoints:
+        - dashboard
+      tls: true
+
+  middlewares:
+    auth_test:
+      basicAuth:
+        users:
+          - 'test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/'
+          - 'test2:$apr1$d9hr9HBB$4HxwgUir3HP4EsggP/QNo0'

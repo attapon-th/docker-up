@@ -1,0 +1,41 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+  DIR_CERTS: ./certs
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+  self-cert:
+    cmds: 
+    - |
+      #using: OpenSSL 1.1.1c FIPS  28 May 2019 / CentOS Linux release 8.2.2004
+      C=TH ; ST=Confusion ; L=Anywhere ; O=Private\ Subnet ; EMAIL=admin@company.com
+      BITS=4096
+      CN=localhost
+      DOM=203.157.102.60
+      SUBJ="/C=$C/ST=$ST/L=$L/O=$O/CN=IP:$CN.$DOM"
+
+      openssl genrsa -out {{.DIR_CERTS}}/key.pem $BITS
+
+      SAN='\n[SAN]\nsubjectAltName=IP:192.168.1.0,IP:127.0.0.1,IP:203.157.102.60'
+
+      cp /etc/pki/tls/openssl.cnf /tmp/openssl.cnf
+      echo -e "$SAN" >> /tmp/openssl.cnf
+
+      openssl req -subj "$SUBJ" -new -x509 -days 10950 \
+          -key {{.DIR_CERTS}}/key.pem -out {{.DIR_CERTS}}/cert.pem -batch \
+          -set_serial 168933982 \
+          -config /tmp/openssl.cnf \
+          -extensions SAN
+
+      openssl x509 -in {{.DIR_CERTS}}/cert.pem -noout -text
+
+  docker-stack-network:
+      cmds:
+        - docker network create --driver=overlay proxy
