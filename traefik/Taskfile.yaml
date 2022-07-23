@@ -10,6 +10,7 @@ tasks:
   default:
     cmds:
       - echo "{{.GREETING}}"
+      - task --list-all
     silent: true
 
   run-stack:
