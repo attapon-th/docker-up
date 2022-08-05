@@ -3,9 +3,6 @@ version: "3.0"
 networks:
   proxy:
     external: true
-  # proxy-overlay:
-  #   external: true
-  #   driver: overlay
 
 services:
   traefik:
@@ -13,7 +10,7 @@ services:
     environment:
       - TZ=Asia/Bangkok
     ports:
-      # - 80:80 # entrypoint: web (redriect schema to (https: 443: websecure))
+      - 80:80 # entrypoint: web (redriect schema to (https: 443: websecure))
       - 443:443 # entrypoint: websecure
       - 8080:8080 # entrypoint: dashboard
     volumes:
@@ -27,9 +24,9 @@ services:
     restart: unless-stopped
     command:
       # Expose Endport listener
-      # - "--entrypoints.web.address=:80"
-      # - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      # - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.dashboard.address=:8080"
 
