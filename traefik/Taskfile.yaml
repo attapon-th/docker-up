@@ -9,17 +9,17 @@ vars:
 tasks:
   default:
     cmds:
-      - echo "{{.GREETING}}"
       - task --list-all
     silent: true
 
-  run-stack:
+  new-network:
     cmds:
-      - cmd: docker network create --driver=overlay proxy
+      - cmd: docker network create --attachable --driver=overlay proxy
         ignore_error: true
-      - docker stack deploy -c docker-stack.yaml traefik
-  run-compose:
+      # - cmd: docker network create --attachable --driver=bridge proxy
+      #   ignore_error: true
+
+  rm-network:
     cmds:
-      - cmd: docker network create --driver=bridge proxy
+      - cmd: docker network rm proxy
         ignore_error: true
-      - docker-compose up -d
