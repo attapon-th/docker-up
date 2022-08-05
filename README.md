@@ -36,6 +36,6 @@ docker-compose -f traefik/docker-compose.yaml up -d
 
 1. `Portainer`
 ```
-docker stack deploy -c portainer/portainer-agent-statck.yaml portainer
+docker stack deploy -c portainer/portainer-agant-stack.yaml portainer
 # http://localhost:9000
 ```
