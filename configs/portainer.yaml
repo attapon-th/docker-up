@@ -1,0 +1,12 @@
+http:
+  routers:
+    portainer:
+      rule: Host(`portainer.local`)
+      service: portainer
+      entryPoints:
+        - websecure
+  services:
+    portainer:
+      loadBalancer:
+        servers:
+          - url: "http://portainer:9000"

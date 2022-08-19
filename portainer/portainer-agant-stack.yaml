@@ -5,8 +5,8 @@ services:
     image: portainer/portainer-ce:latest
     command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify
     hostname: portainer
-    ports:
-      - "9000:9000"
+    # ports:
+    #   - "9000:9000"
     environment:
       - TZ=Asia/Bangkok
     volumes:
@@ -19,15 +19,6 @@ services:
       replicas: 1
       placement:
         constraints: [node.role == manager]
-      labels:
-        # Frontend
-        - "traefik.enable=true"
-        #  Portainer UI
-        - "traefik.http.routers.portainer.entrypoints=websecure"
-        - "traefik.http.routers.portainer.rule=Host(`portainer.local.loc`)" # example hostname
-        - "traefik.http.routers.portainer.service=portainer"
-        - "traefik.http.routers.portainer.tls=true"
-        - "traefik.http.services.portainer.loadbalancer.server.port=9000"
 
   portainer-agent:
     image: portainer/agent:latest

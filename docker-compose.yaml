@@ -41,7 +41,7 @@ services:
 
       # Provider
       - "--providers.docker"
-      - "--providers.docker.swarmmode=true"
+      - "--providers.docker.swarmmode=false" # true if use docker swarm mode
       - "--providers.docker.network=proxy"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.httpclienttimeout=3600"
