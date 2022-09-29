@@ -1,10 +1,21 @@
 http:
   routers:
     portainer:
-      rule: Host(`portainer.local`)
+      rule: Host(`__DOMAIN__`)
       service: portainer
+      middleware:
+        - portainer-stripprefix
       entryPoints:
+        - web
         - websecure
+      tls: true
+
+  middleware:
+    portainer-stripprefix:
+      stripprefix:
+        prefixes:
+          - /portainer
+
   services:
     portainer:
       loadBalancer:

@@ -21,7 +21,16 @@ services:
     networks:
       - proxy
       # - proxy-overlay
-    restart: unless-stopped
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 2s
+        window: 120s
+
+    labels:
+      - "traefik.enable=true"
     command:
       # Expose Endport listener
       - "--entrypoints.web.address=:80"
@@ -53,8 +62,6 @@ services:
       - "--accesslog"
       - "--accesslog.bufferingsize=100"
       - "--accesslog.filepath=/var/log/traefik/access.log"
-    labels:
-      - "traefik.enable=true"
 
   logrotate:
     image: vegardit/traefik-logrotate:latest
@@ -70,7 +77,7 @@ services:
       LOGROTATE_TRIGGER_SIZE: 100M # rotate if log file size reaches 50MB
       LOGROTATE_MAX_BACKUPS: 90 # keep 14 backup copies per rotated log file
       LOGROTATE_START_INDEX: 1 # first rotated file is called access.1.log
-      CRON_SCHEDULE: "* * * * *"
+      CRON_SCHEDULE: "0 0 * * *"
       CRON_LOG_LEVEL: 8 # see https://unix.stackexchange.com/a/414010/378036
       # command to determine the id of the container running Traefik:
       TRAEFIK_CONTAINER_ID_COMMAND: docker ps --quiet --filter ancestor=traefik

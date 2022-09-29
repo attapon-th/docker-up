@@ -1,21 +1,22 @@
+# tls:
+#   stores:
+#     default:
+#       defaultCertificate:
+#         certFile: /certs/cert.pem
+#         keyFile: /certs/key.pem
+
 http:
   routers:
     ping_router:
-      rule: Host(`localhost`) && Path(`/ping`)
+      rule: Host(`__DOMAIN__`) && Path(`/ping`)
       service: ping@internal
-      entryPoints:
-        - dashboard
-
-    dashboard_router:
-      rule: Host(`localhost`)
-      service: api@internal
       entryPoints:
         - dashboard
       tls: true
 
-  middlewares:
-    auth_test:
-      basicAuth:
-        users:
-          - "test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/"
-          - "test2:$apr1$d9hr9HBB$4HxwgUir3HP4EsggP/QNo0"
+    dashboard_router:
+      rule: Host(`__DOMAIN__`)
+      service: api@internal
+      entryPoints:
+        - dashboard
+      tls: true
