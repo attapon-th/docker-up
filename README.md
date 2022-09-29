@@ -1,41 +1,66 @@
-# Traefik setup for docker.
+# Traefik setup for docker swarm mode
 
-## Configuration 
- * Docker
- * Docker Compose
- * Docker stack - `docker swarm init`
+Can use:
 
-
-- [x] [Traefik Proxy](./traefik/) - สำหรับทำ reverse proxy เหมาะใช้กับ Docker
+- docker stack deploy
+- docker compose
+- docker run
 
 
-## How to Use `Traefik Proxy`:
+## Requirement
+
+- Docker - [Installation](https://docs.docker.com/engine/install/)
+
+- Docker Compose - [Release Page](https://github.com/docker/compose/releases)
+
+## How to
+
+1. Create directory project
+
+    ```shell
+    mkdir -p ~/treafik
+    cd ~/treafik
+    ```
+
+2. Download cli helper
+
+    ```shell
+    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/cli.sh -o ./cli \
+    && chmod +x ./cli
+
+    ./cli
+    ```
+
+    output:
+
+    ```raw
+   ./cli [command]
+   Commands: 
+        init                Init project and set configulation
+        config              Set config porject
+        deploy              Stack deploy (traefik and portainer) in swarm mode
+        install-compose     Install docker-compose version v2.11.2
+        add                 Add new route in traefik with template(./template/sample.yaml)
+    ```
+
+3. Start Init and deploy project
+
+    ```shell
+    ./cli init
+    ./cli deploy
+    ```
+
+
+## Add basic reverse proxy
+
+```shell
+./cli add
 ```
-git clone https://github.com/attapon-th/traefik-setup.git
 
+## Optional: Install `docker compose`
 
-cd traefik-setup
+```shell
+./cli install-compose
 
-
-# create docker network
-docker network create --attachable --driver=overlay proxy
-
-
-# start docker by docker-compsoe
-docker-compose -f traefik/docker-compose.yaml up -d
-
-## https
-# dashboard: https://localhost:8080/
-
-## http
-# ping: http://localhost:8080/ping
-```
-
-
-## Optional:
-
-1. `Portainer`
-```
-docker stack deploy -c portainer/portainer-agant-stack.yaml portainer
-# http://localhost:9000
+docker compose version
 ```
