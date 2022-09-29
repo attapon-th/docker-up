@@ -2,7 +2,7 @@
 
 set -e
 
-CLI="./cli.sh"
+CLI="$0"
 COMPOSE_VERSION="v2.11.2"
 init(){
     echo "Is current directory: " $(pwd)
@@ -55,11 +55,17 @@ install-compose(){
 }
 
 add(){
-    test ! -f "./domain.txt" || (echo "Plaese run:  ${CLI} config" exit 0)
+    test -f "./domain.txt" || (echo "Plaese run:  ${CLI} config" exit 0)
     DOMAIN=$(cat "./domain.txt")
     test -n "${DOMAIN}" || (echo "Domain or IP not empty."; exit 1)
     read -p "ServiceName: " SERVICE
     test -n "${SERVICE}" || (echo "ServiceName not empty."; exit 1)
+    if [ -f "configs/${SERVICE}.yaml" ]; then
+        echo "Service: ${SERVICE} is exist. Overwrite service [y/n]: "
+        read ok
+        test "$ok" = "y" && echo "Overwrite service ${SERVICE}" || exit 1
+    fi
+
     read -p "PathPrefix(default: /): " PATHPREFIX
     test -n "${PATHPREFIX}" || PATHPREFIX="/"
     echo "Service: \`${SERVICE}\` is set rule: Host(\`${DOMAIN}\`) && PathPrefix(\`${PATHPREFIX}\`)"
@@ -73,9 +79,11 @@ add(){
     sed -i "s/__PATHPREFIX__/${REGEXPATH}/g"  "/tmp/${SERVICE}.yaml"
     sed -i "s/__ST__/\\//g"  "/tmp/${SERVICE}.yaml"
     mv "/tmp/${SERVICE}.yaml" "configs/${SERVICE}.yaml"
+    echo "Success!!!"
 
-    echo "Test call: https://${DOMAIN}/${PATHPREFIX}"
-    curl -I -k "https://${DOMAIN}/${PATHPREFIX}"
+    ping ${DOMAIN} -c 5
+    echo "Test: curl -I -k --connection-timeout 30  https://${DOMAIN}/${PATHPREFIX}"
+    curl -I -k --connection-timeout 30  "https://${DOMAIN}/${PATHPREFIX}"
     exit 0
 }
 
@@ -86,7 +94,7 @@ $@
 echo "cli helper for create reverse-proxy with treafik"
 echo "${CLI} [command]"
 echo "Commands: "
-echo "  init                Init project and load configulation"
+echo "  init                Init project and set configulation"
 echo "  config              Set config porject"
 echo "  deploy              Stack deploy (traefik and portainer) in swarm mode"
 echo "  install-compose     Install docker-compose version ${COMPOSE_VERSION}"

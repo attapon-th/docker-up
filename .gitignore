@@ -1,2 +1,5 @@
 /traefik/certs/*
 /tls-gen
+/domain.txt
+/cli
+/test
