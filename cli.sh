@@ -22,9 +22,36 @@ init(){
     config
 }
 
+up(){
+    if [ -f "domain.txt" ]; then
+        echo "docker compose up -d traefik"
+        docker stack deploy -c traefik-stack.yaml traefik
+        read -p "Deploy Portainter?[y/n]" confirm
+        if [[ "$confirm" == ""  || "$confirm" == "n" ]]; then
+            exit 1
+        fi
+        deploy-portainer
+    fi
+    exit 0
+}
+
+
 deploy(){
     if [ -f "domain.txt" ]; then
+        echo "docker stack deploay traefik"
         docker stack deploy -c traefik-stack.yaml traefik
+        read -p "Deploy Portainter?[y/n]" confirm
+        if [[ "$confirm" == ""  || "$confirm" == "n" ]]; then
+            exit 1
+        fi
+        deploy-portainer
+    fi
+    exit 0
+}
+
+deploy-portainer(){
+    if [ -f "domain.txt" ]; then
+        echo "docker stack deploy portainer "
         docker stack deploy -c portainer-agant-stack.yaml portainer
     fi
     exit 0
