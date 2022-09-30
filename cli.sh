@@ -57,6 +57,7 @@ install-compose(){
 cli-update(){
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/cli.sh -o ${CLI} \
     && chmod +x ${CLI}
+    exit 0
 }
 
 add(){
