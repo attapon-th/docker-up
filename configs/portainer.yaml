@@ -3,15 +3,15 @@ http:
     portainer:
       #rule: Host(`__DOMAIN__`)
       rule: Host(`__DOMAIN__`) && PathPrefix(`/portainer`)
-      middleware:
-        - portainer-stripprefix
+
       service: portainer
       entryPoints:
         - web
         - websecure
       tls: true
-
-  middleware:
+      middlewares:
+        - portainer-stripprefix
+  middlewares:
     portainer-stripprefix:
       stripprefix:
         prefixes:

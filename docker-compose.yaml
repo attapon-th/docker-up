@@ -1,4 +1,4 @@
-version: "3.0"
+version: "3.8"
 
 networks:
   proxy:
@@ -15,10 +15,9 @@ services:
       # - 8080:8080 # entrypoint: dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./configs/:/traefic/configs
-      - ./certs/:/certs
+      - ./configs/:/traefic/configs/
+      - ./certs/:/certs/
       - /var/log/traefik/:/var/log/traefik/
-
     networks:
       - proxy
       # - proxy-overlay
@@ -58,13 +57,6 @@ services:
       - "--accesslog.format=json"
     labels:
       - "traefik.enable=true"
-    # deploy: # for swarm mod
-    #   mode: replicated
-    #   replicas: 1
-    #   restart_policy:
-    #     condition: any
-    #     delay: 2s
-    #     window: 120s
 
   logrotate:
     image: vegardit/traefik-logrotate:latest
