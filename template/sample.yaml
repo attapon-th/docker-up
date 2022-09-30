@@ -12,4 +12,4 @@ http:
     __SERVICE__:
       loadBalancer:
         servers:
-          - url: "http://__SERVICE__"
+          - url: "__SERVICE_URL__"

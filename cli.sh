@@ -68,13 +68,21 @@ add(){
 
     read -p "PathPrefix(default: /): " PATHPREFIX
     test -n "${PATHPREFIX}" || PATHPREFIX="/"
+
+    read -p "Service URL (default: http://${SERVICE}) :" SERVICE_URL
+    test -n "${SERVICE_URL}" || SERVICE_URL="http://${SERVICE})"
+
     echo "Service: \`${SERVICE}\` is set rule: Host(\`${DOMAIN}\`) && PathPrefix(\`${PATHPREFIX}\`)"
+    echo "Service URL Listener: ${SERVICE_URL}"
+
 
     echo "Use template template/sample.yaml"
     cp template/sample.yaml "/tmp/${SERVICE}.yaml"
 
     sed -i "s/__DOMAIN__/${DOMAIN}/g" "/tmp/${SERVICE}.yaml"
     sed -i "s/__SERVICE__/${SERVICE}/g"  "/tmp/${SERVICE}.yaml"
+    sed -i "s/__SERVICE_URL__/${SERVICE_URL}/g"  "/tmp/${SERVICE}.yaml"
+    
     REGEXPATH=$(echo "/test/t1" | sed -e 's/\//__ST__/g')
     sed -i "s/__PATHPREFIX__/${REGEXPATH}/g"  "/tmp/${SERVICE}.yaml"
     sed -i "s/__ST__/\\//g"  "/tmp/${SERVICE}.yaml"
