@@ -97,8 +97,8 @@ add(){
     echo "Success!!!"
 
     ping ${DOMAIN} -c 5
-    echo "Test: curl -I -k  https://${DOMAIN}/${PATHPREFIX}"
-    curl -I -k  "https://${DOMAIN}/${PATHPREFIX}"
+    echo "Test: curl -I -k  https://${DOMAIN}${PATHPREFIX}"
+    curl -I -k  "https://${DOMAIN}${PATHPREFIX}"
     exit 0
 }
 
