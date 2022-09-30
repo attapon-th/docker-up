@@ -54,6 +54,11 @@ install-compose(){
     exit 0
 }
 
+cli-update(){
+    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/cli.sh -o ${CLI} \
+    && chmod +x ${CLI}
+}
+
 add(){
     test -f "./domain.txt" || (echo "Plaese run:  ${CLI} config" exit 0)
     DOMAIN=$(cat "./domain.txt")
@@ -93,8 +98,8 @@ add(){
     echo "Success!!!"
 
     ping ${DOMAIN} -c 5
-    echo "Test: curl -I -k --connection-timeout 30  https://${DOMAIN}/${PATHPREFIX}"
-    curl -I -k --connection-timeout 30  "https://${DOMAIN}/${PATHPREFIX}"
+    echo "Test: curl -I -k  https://${DOMAIN}/${PATHPREFIX}"
+    curl -I -k  "https://${DOMAIN}/${PATHPREFIX}"
     exit 0
 }
 
@@ -110,3 +115,4 @@ echo "  config              Set config porject"
 echo "  deploy              Stack deploy (traefik and portainer) in swarm mode"
 echo "  install-compose     Install docker-compose version ${COMPOSE_VERSION}"
 echo "  add                 Add new route in traefik with template(./template/sample.yaml)"
+echo "  cli-update          update '${CLI}' helper"
