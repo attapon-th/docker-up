@@ -18,6 +18,7 @@ services:
       - ./configs/:/traefic/configs
       - ./certs/:/certs
       - /var/log/traefik/:/var/log/traefik/
+
     networks:
       - proxy
       # - proxy-overlay
@@ -53,8 +54,17 @@ services:
       - "--accesslog"
       - "--accesslog.bufferingsize=100"
       - "--accesslog.filepath=/var/log/traefik/access.log"
+      - "--accesslog.fields.names.StartUTC=drop"
+      - "--accesslog.format=json"
     labels:
       - "traefik.enable=true"
+    # deploy: # for swarm mod
+    #   mode: replicated
+    #   replicas: 1
+    #   restart_policy:
+    #     condition: any
+    #     delay: 2s
+    #     window: 120s
 
   logrotate:
     image: vegardit/traefik-logrotate:latest
@@ -70,7 +80,7 @@ services:
       LOGROTATE_TRIGGER_SIZE: 100M # rotate if log file size reaches 50MB
       LOGROTATE_MAX_BACKUPS: 90 # keep 14 backup copies per rotated log file
       LOGROTATE_START_INDEX: 1 # first rotated file is called access.1.log
-      CRON_SCHEDULE: "* * * * *"
+      CRON_SCHEDULE: "0 0 * * *"
       CRON_LOG_LEVEL: 8 # see https://unix.stackexchange.com/a/414010/378036
       # command to determine the id of the container running Traefik:
       TRAEFIK_CONTAINER_ID_COMMAND: docker ps --quiet --filter ancestor=traefik
