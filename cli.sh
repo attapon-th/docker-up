@@ -37,8 +37,8 @@ deploy(){
 config(){
     docker network create --attachable --driver=overlay proxy || echo "docker network with name 'proxy' already exists"
     echo "Setup treafik domain config"
-    read -p "Domain or IP: " DOMAIN 
-    test -n "${DOMAIN}" || (echo "Domain or IP not empty."; exit 1)
+    read -p "Domain or IP (default: localhost): " DOMAIN 
+    test -n "${DOMAIN}" || DOMAIN="localhost"
     echo "Your server is domain: ${DOMAIN}"
     echo "Setup to traefik configs"
     echo "${DOMAIN}" > domain.txt
@@ -82,7 +82,7 @@ add(){
     sed -i "s/__DOMAIN__/${DOMAIN}/g" "/tmp/${SERVICE}.yaml"
     sed -i "s/__SERVICE__/${SERVICE}/g"  "/tmp/${SERVICE}.yaml"
     sed -i "s/__SERVICE_URL__/${SERVICE_URL}/g"  "/tmp/${SERVICE}.yaml"
-    
+
     REGEXPATH=$(echo "/test/t1" | sed -e 's/\//__ST__/g')
     sed -i "s/__PATHPREFIX__/${REGEXPATH}/g"  "/tmp/${SERVICE}.yaml"
     sed -i "s/__ST__/\\//g"  "/tmp/${SERVICE}.yaml"
