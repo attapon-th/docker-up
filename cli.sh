@@ -106,12 +106,18 @@ add(){
 
 $@
 
-echo "cli helper for create reverse-proxy with treafik"
+echo "command shell script helper for create reverse-proxy with treafik"
+echo "Documentation: https://doc.traefik.io/traefik/"
+echo "Treafik config route direcotry: ./configs"
+echo ""
 echo "${CLI} [command]"
 echo "Commands: "
 echo "  init                Init project and set configulation"
 echo "  config              Set config porject"
 echo "  deploy              Stack deploy (traefik and portainer) in swarm mode"
-echo "  install-compose     Install docker-compose version ${COMPOSE_VERSION}"
 echo "  add                 Add new route in traefik with template(./template/sample.yaml)"
+echo ""
+echo "Optional tools:"
+echo "  install-compose     Install docker-compose version ${COMPOSE_VERSION}"
 echo "  cli-update          update '${CLI}' helper"
+echo ""
