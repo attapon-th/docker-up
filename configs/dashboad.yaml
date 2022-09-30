@@ -8,15 +8,16 @@
 http:
   routers:
     ping_router:
-      rule: Host(`__DOMAIN__`) && Path(`/ping`)
+      rule: Host(`traefik-__DOMAIN__`) && Path(`/ping`)
       service: ping@internal
       entryPoints:
-        - dashboard
+        - websecure
       tls: true
 
     dashboard_router:
-      rule: Host(`__DOMAIN__`)
+      rule: Host(`traefik-__DOMAIN__`)
       service: api@internal
       entryPoints:
-        - dashboard
+        - web
+        - websecure
       tls: true

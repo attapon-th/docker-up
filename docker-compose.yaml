@@ -12,7 +12,7 @@ services:
     ports:
       - 80:80 # entrypoint: web (redriect schema to (https: 443: websecure))
       - 443:443 # entrypoint: websecure
-      - 8080:8080 # entrypoint: dashboard
+      # - 8080:8080 # entrypoint: dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./configs/:/traefic/configs
@@ -28,7 +28,7 @@ services:
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.dashboard.address=:8080"
+      # - "--entrypoints.dashboard.address=:8080"
 
       - "--global.sendAnonymousUsage"
       - "--global.checkNewVersion"

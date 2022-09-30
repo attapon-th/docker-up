@@ -1,10 +1,11 @@
 http:
   routers:
     portainer:
-      rule: Host(`__DOMAIN__`)
-      service: portainer
+      #rule: Host(`__DOMAIN__`)
+      rule: Host(`__DOMAIN__`) && PathPrefix(`/portainer`)
       middleware:
         - portainer-stripprefix
+      service: portainer
       entryPoints:
         - web
         - websecure
@@ -20,4 +21,4 @@ http:
     portainer:
       loadBalancer:
         servers:
-          - url: "http://portainer:9000"
+          - url: "http://portainer:9443"
