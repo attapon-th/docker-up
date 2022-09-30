@@ -55,11 +55,9 @@ install-compose(){
 }
 
 cli-update(){
-    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/cli.sh -o ${CLI} \
-    && chmod +x ${CLI}
+    /bin/bash -c  "curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/cli.sh -o ${CLI} && chmod +x ${CLI}"
     exit 0
 }
-
 add(){
     test -f "./domain.txt" || (echo "Plaese run:  ${CLI} config" exit 0)
     DOMAIN=$(cat "./domain.txt")
