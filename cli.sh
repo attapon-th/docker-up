@@ -14,7 +14,7 @@ init(){
     mkdir -p certs
     mkdir -p template
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/docker-compose.yaml -o docker-compose.yaml
-    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/treafik-stack.yaml -o treafik-stack.yaml
+    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/traefik-stack.yaml -o traefik-stack.yaml
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/portainer-agant-stack.yaml -o portainer-agant-stack.yaml
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/dashboad.yaml -o configs/dashboad.yaml
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/portainer.yaml -o configs/portainer.yaml
@@ -24,7 +24,7 @@ init(){
 
 deploy(){
     if [ -f "domain.txt" ]; then
-        docker stack deploy -c treafik-stack.yaml traefik
+        docker stack deploy -c traefik-stack.yaml traefik
         docker stack deploy -c portainer-agant-stack.yaml portainer
     fi
     exit 0
