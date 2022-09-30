@@ -24,10 +24,6 @@ init(){
 
 deploy(){
     if [ -f "domain.txt" ]; then
-        DOMAIN=$(cat "./domain.txt")
-        test -n "${DOMAIN}" || (echo "Domain/IP empty. Please run: ${CLI} config"; exit 1)
-        sed -i "s/__DOMAIN__/${DOMAIN}/g" configs/dashboad.yaml
-        sed -i "s/__DOMAIN__/${DOMAIN}/g" configs/portainer.yaml
         docker stack deploy -c treafik-stack.yaml traefik
         docker stack deploy -c portainer-agant-stack.yaml portainer
     fi
@@ -42,6 +38,9 @@ config(){
     echo "Your server is domain: ${DOMAIN}"
     echo "Setup to traefik configs"
     echo "${DOMAIN}" > domain.txt
+    test -n "${DOMAIN}" || (echo "Domain/IP empty. Please run: ${CLI} config"; exit 1)
+    sed -i "s/__DOMAIN__/${DOMAIN}/g" configs/dashboad.yaml
+    sed -i "s/__DOMAIN__/${DOMAIN}/g" configs/portainer.yaml
     exit 0
 }
 
