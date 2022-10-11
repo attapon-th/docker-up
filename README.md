@@ -43,7 +43,7 @@ Can use:
         add                 Add new route in traefik with template(./template/sample.yaml)
     ```
 
-3. Start Docker Swarm Init
+3. Start Docker Swarm Mode
 
     ```shell
     docker swarm init
