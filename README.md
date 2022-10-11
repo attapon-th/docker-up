@@ -43,24 +43,47 @@ Can use:
         add                 Add new route in traefik with template(./template/sample.yaml)
     ```
 
-3. Start Init and deploy project
+3. Start Docker Swarm Init
 
     ```shell
+    docker swarm init
+    ```
+
+4. Start Init and deploy project
+
+    ```shell
+    
     ./cli init
     ./cli deploy
     ```
 
 
-## Add basic reverse proxy
+## Add basic route config
 
 ```shell
 ./cli add
 ```
 
-## Optional: Install `docker compose`
 
-```shell
-./cli install-compose
+##  Basic route with docker-compose file
 
-docker compose version
+### Docker Stack
+
+```yaml
+
+version: "3.8"
+services:
+  test:
+    imange: ...
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.{set-name}.tls=true"
+        - "traefik.http.routers.{set-name}.rule=Host(`localhost`) && PathPrefix(`/api/v1`)"
+        - "traefik.http.routers.{set-name}.entryPoints=web,websecure"
+        - "traefik.http.services.{set-name}.loadbalancer.server.port=3000"
+
+
 ```
