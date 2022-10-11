@@ -84,6 +84,4 @@ services:
         - "traefik.http.routers.{set-name}.rule=Host(`localhost`) && PathPrefix(`/api/v1`)"
         - "traefik.http.routers.{set-name}.entryPoints=web,websecure"
         - "traefik.http.services.{set-name}.loadbalancer.server.port=3000"
-
-
 ```
