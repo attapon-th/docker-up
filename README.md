@@ -72,6 +72,8 @@ Can use:
 - Traefik Dashboard:   `https://__DOMAIN__/dashboard` 
     - use path prefix: `/dashboard`, `/api`
     - file config: `./configs/dasnboard.yaml`
+    - Username: `admin`
+    - Password: `admin`
 
 
 ##  Basic route with docker-compose file
