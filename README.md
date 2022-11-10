@@ -64,13 +64,21 @@ Can use:
 ./cli add
 ```
 
+## URL Deploy 
+- Portainer: `https://__DOMAIN__/portainer` 
+    - use path prefix: `/portainer`
+    - file config: `./configs/portainer.yaml`
+
+- Traefik Dashboard:   `https://__DOMAIN__/dashboard` 
+    - use path prefix: `/dashboard`, `/api`
+    - file config: `./configs/dasnboard.yaml`
+
 
 ##  Basic route with docker-compose file
 
 ### Docker Stack
 
 ```yaml
-
 version: "3.8"
 services:
   test:

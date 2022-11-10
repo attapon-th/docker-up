@@ -1,0 +1,8 @@
+tls:
+  stores:
+    default: {}
+  # certificates:
+  #   - certFile: /certs/default.crt
+  #     keyFile: /certs/default.key
+  #     stores:
+  #       - default

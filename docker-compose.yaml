@@ -16,7 +16,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./configs/:/traefic/configs/
-      - ./certs/:/certs/
+      - /var/certs/:/certs/
       - /var/log/traefik/:/var/log/traefik/
     networks:
       - proxy
