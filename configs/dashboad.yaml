@@ -4,15 +4,14 @@ http:
       rule: Host(`__DOMAIN__`) && Path(`/ping`)
       service: ping@internal
       entryPoints:
-        - websecure
+        - dashboard
       tls: true
 
     dashboard_router:
       rule: Host(`__DOMAIN__`) && (PathPrefix(`/dashboard`) && PathPrefix(`/api`))
       service: api@internal
       entryPoints:
-        - web
-        - websecure
+        - dashboard
       middlewares:
         - auth_dashboard
       tls: true

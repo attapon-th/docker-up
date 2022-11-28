@@ -10,7 +10,7 @@ init(){
     if [[ "$confirm" == ""  || "$confirm" == "n" ]]; then
         exit 1
     fi
-    sudo mkdir -p /var/certs && chmod 771 /var/certs && chown root:wheel /var/certs
+    sudo mkdir -p /var/log/traefik
     mkdir -p configs
     mkdir -p certs
     mkdir -p template
@@ -19,6 +19,7 @@ init(){
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/portainer-agant-stack.yaml -o portainer-agant-stack.yaml
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/dashboad.yaml -o configs/dashboad.yaml
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/portainer.yaml -o configs/portainer.yaml
+    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/certs.yaml -o configs/certs.yaml
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/template/sample.yaml -o template/sample.yaml
     config
 }
