@@ -4,11 +4,13 @@ http:
       rule: Host(`__DOMAIN__`) && Path(`/ping`)
       service: ping@internal
       entryPoints:
+        - web
+        - websecure
         - dashboard
       tls: true
 
     dashboard_router:
-      rule: Host(`__DOMAIN__`) && (PathPrefix(`/dashboard`) && PathPrefix(`/api`))
+      rule: Host(`__DOMAIN__`) && PathPrefix(`/dashboard`, `/api`)
       service: api@internal
       entryPoints:
         - dashboard
@@ -21,3 +23,4 @@ http:
       basicAuth:
         users:
           - "admin:$2y$10$AZnZK/lLh91Byw/.uzfPUeHH7LJHC.Pv48uuyUPGmgU/kQ5Vy6.9u" # admin:admin
+

@@ -29,7 +29,7 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.dashboard.address=:8080"
 
-      - "--global.sendAnonymousUsage"
+      # - "--global.sendAnonymousUsage"
       - "--global.checkNewVersion"
       - "--serverstransport.insecureskipverify=true"
       # Operations

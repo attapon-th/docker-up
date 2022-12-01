@@ -1,7 +1,6 @@
 http:
   routers:
     portainer:
-      #rule: Host(`__DOMAIN__`)
       rule: Host(`__DOMAIN__`) && PathPrefix(`/portainer`)
 
       service: portainer
