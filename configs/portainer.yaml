@@ -20,4 +20,4 @@ http:
     portainer:
       loadBalancer:
         servers:
-          - url: "https://portainer:9000"
+          - url: "http://portainer:9000"
