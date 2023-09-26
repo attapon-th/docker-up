@@ -18,8 +18,8 @@ Can use:
 1. Create directory project
 
     ```shell
-    mkdir -p ~/treafik
-    cd ~/treafik
+    mkdir -p ~/traefik
+    cd ~/traefik
     ```
 
 2. Download cli helper
