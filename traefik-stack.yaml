@@ -68,7 +68,7 @@ services:
     image: vegardit/traefik-logrotate:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:rw # required to send USR1 signal to Traefik after log rotation
-      - /logs:/var/log/traefik:rw # folder containing access.log file
+      - ./logs:/var/log/traefik:rw # folder containing access.log file
     environment:
       TZ: "Asia/Bangkok"
       # all environment variables are optional and show the default values:

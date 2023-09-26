@@ -10,7 +10,6 @@ init(){
     if [[ "$confirm" == ""  || "$confirm" == "n" ]]; then
         exit 1
     fi
-    sudo mkdir -p /var/log/traefik
     mkdir -p configs
     mkdir -p certs
     mkdir -p template
