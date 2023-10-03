@@ -1,0 +1,54 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: true
+
+serversTransport:
+  insecureSkipVerify: true
+
+entryPoints:
+  dashboard:
+    address: ":8080"
+  websecure:
+    address: ":443"
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+
+providers:
+  docker:
+    watch: true
+    network: proxy
+    swarmMode: true
+    swarmModeRefreshSeconds: 30s
+    httpClientTimeout: 60s
+    exposedByDefault: false
+  file:
+    directory: /traefik/configs
+    watch: true
+
+api:
+  insecure: false
+  dashboard: true
+  debug: true
+  disabledashboardad: false
+ping:
+  manualRouting: true
+
+log:
+  level: INFO
+  format: json
+accessLog:
+  filePath: /var/log/traefik/access.log
+  format: json
+  bufferingSize: 100
+  fields:
+    defaultMode: keep
+    names:
+      StartUTC: drop
+      User-Agent: redact
+      Authorization: drop
+      Content-Type: keep

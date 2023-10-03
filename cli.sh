@@ -10,12 +10,11 @@ init(){
     if [[ "$confirm" == ""  || "$confirm" == "n" ]]; then
         exit 1
     fi
-    sudo mkdir -p /var/log/traefik
     mkdir -p configs
     mkdir -p certs
     mkdir -p template
     mkdir -p logs
-    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/docker-compose.yaml -o docker-compose.yaml
+    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/TraefikConfigs.yaml -o TraefikConfigs.yaml
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/traefik-stack.yaml -o traefik-stack.yaml
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/portainer-agant-stack.yaml -o portainer-agant-stack.yaml
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/dashboad.yaml -o configs/dashboad.yaml
@@ -25,23 +24,21 @@ init(){
     config
 }
 
-up(){
-    if [ -f "domain.txt" ]; then
-        echo "docker compose up -d traefik"
-        docker stack deploy -c traefik-stack.yaml traefik
-        read -p "Deploy Portainter?[y/n]" confirm
-        if [[ "$confirm" == ""  || "$confirm" == "n" ]]; then
-            exit 1
-        fi
-        deploy-portainer
-    fi
-    exit 0
+
+pull_traefik(){
+    docker pull traefik:latest
+    docker pull vegardit/traefik-logrotate:latest
 }
 
+pull_portainer(){
+    docker pull portainer/portainer-ce:latest
+    docker pull portainer/agent:latest
+}
 
 deploy(){
     if [ -f "domain.txt" ]; then
         echo "docker stack deploay traefik"
+        pull_traefik
         docker stack deploy -c traefik-stack.yaml traefik
         read -p "Deploy Portainter?[y/n]" confirm
         if [[ "$confirm" == ""  || "$confirm" == "n" ]]; then
@@ -54,6 +51,7 @@ deploy(){
 
 deploy-portainer(){
     if [ -f "domain.txt" ]; then
+        pull_portainer
         echo "docker stack deploy portainer "
         docker stack deploy -c portainer-agant-stack.yaml portainer
     fi
@@ -63,8 +61,9 @@ deploy-portainer(){
 config(){
     docker network create --attachable --driver=overlay proxy || echo "docker network with name 'proxy' already exists"
     echo "Setup treafik domain config"
-    read -p "Domain or IP (default: localhost): " DOMAIN 
-    test -n "${DOMAIN}" || DOMAIN="localhost"
+    DOMAIN=$(cat "./domain.txt")
+    read -p "Domain or IP (default: ${DOMAIN}): " DOMAIN 
+    test -n "${DOMAIN}" || DOMAIN=$(cat "./domain.txt")
     echo "Your server is domain: ${DOMAIN}"
     echo "Setup to traefik configs"
     echo "${DOMAIN}" > domain.txt
@@ -74,19 +73,12 @@ config(){
     exit 0
 }
 
-install-compose(){
-    DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-    mkdir -p $DOCKER_CONFIG/cli-plugins
-    curl -SL "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-linux-x86_64" -o $DOCKER_CONFIG/cli-plugins/docker-compose
-    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
-    docker compose version
-    exit 0
-}
 
 cli-update(){
     /bin/bash -c  "curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/cli.sh -o ${CLI} && chmod +x ${CLI}"
     exit 0
 }
+
 add(){
     test -f "./domain.txt" || (echo "Plaese run:  ${CLI} config" exit 0)
     DOMAIN=$(cat "./domain.txt")
