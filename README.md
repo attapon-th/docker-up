@@ -17,81 +17,116 @@ Can use:
 
 1. Create directory project
 
-    ```shell
-    mkdir -p ~/treafik
-    cd ~/treafik
-    ```
+  ```shell
+  mkdir -p ~/traefik
+  cd ~/traefik
+  ```
 
 2. Download cli helper
+  ```shell
+  curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/cli.sh -o ./cli \
+  && chmod +x ./cli
+  ```
 
-    ```shell
-    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/cli.sh -o ./cli \
-    && chmod +x ./cli
-
-    ./cli
-    ```
-
-    output:
-
-    ```raw
-   ./cli [command]
-   Commands: 
-        init                Init project and set configulation
-        config              Set config porject
-        deploy              Stack deploy (traefik and portainer) in swarm mode
-        install-compose     Install docker-compose version v2.11.2
-        add                 Add new route in traefik with template(./template/sample.yaml)
-    ```
+  test use:
+  ```raw
+  ./cli
+  Commands: 
+      init                Init project and set configulation
+      config              Set config porject
+      deploy              Stack deploy (traefik and portainer) in swarm mode
+      add                 Add new route in traefik with template(./template/sample.yaml)
+  ```
 
 3. Start Docker Swarm Mode
 
-    ```shell
-    docker swarm init
-    ```
+  ```shell
+  docker swarm init
+  ```
 
-4. Start Init and deploy project
+4. Init traefik `init` and `deploy` traefik
 
-    ```shell
-    
-    ./cli init
-    ./cli deploy
-    ```
+  ```shell
+  ./cli init
+  ./cli deploy
+  ```
 
-
-## Add basic route config
-
-```shell
-./cli add
-```
-
-## URL Deploy 
-- Portainer: `https://__DOMAIN__/portainer` 
-    - use path prefix: `/portainer`
-    - file config: `./configs/portainer.yaml`
-
-- Traefik Dashboard:   `https://__DOMAIN__/dashboard` 
-    - use path prefix: `/dashboard`, `/api`
-    - file config: `./configs/dasnboard.yaml`
-    - Username: `admin`
-    - Password: `admin`
+## Default URL
+ - `https://__DOMAIN__/portainer`
+ - `https://__DOMAIN__:8080/dashboard`
+ - `https://__DOMAIN__:8080/ping`
+ - `https://__DOMAIN__/ping`
 
 
-##  Basic route with docker-compose file
-
-### Docker Stack
+## Use Traefik in another Docker stack
 
 ```yaml
+# ----- ENV required -------
+# SERVICE_NAME=
+# SERVICE_PORT=
+# DOMAIN=
+# PREFIX=
+# --------------------------
 version: "3.8"
 services:
-  test:
+  ${SERVICE_NAME}:
     imange: ...
     deploy:
       mode: replicated
       replicas: 1
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.{set-name}.tls=true"
-        - "traefik.http.routers.{set-name}.rule=Host(`localhost`) && PathPrefix(`/api/v1`)"
-        - "traefik.http.routers.{set-name}.entryPoints=web,websecure"
-        - "traefik.http.services.{set-name}.loadbalancer.server.port=3000"
+        - "traefik.http.routers.${SERVICE_NAME}.tls=true"
+        - "traefik.http.routers.${SERVICE_NAME}.rule=Host(`${DOMAIN:-localhost}`) && PathPrefix(`${PREFIX:-/}`)"
+        - "traefik.http.routers.${SERVICE_NAME}.entryPoints=web,websecure"
+        - "traefik.http.services.${SERVICE_NAME}.loadbalancer.server.port=${SERVICE_PORT:-80}"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
+```
+
+## ADD service filebrowser for edit config traefik
+```yaml
+# ENV required
+# --------------------------------------------
+# SERVICE_NAME=filebrowser4traefik
+# DOMAIN=localhost
+# BASE_URL=/filebrowser4traefik
+# USERNAME=admin
+# PASSWORD=admin
+# VOLUME_MOUNT=/etc/traefik
+# PUID=1000
+# PGID=1000
+# --------------------------------------------
+# END ENV
+version: "3.8"
+services:
+  ${SERVICE_NAME}:
+    image: filebrowser/filebrowser:latest
+    environment:
+      TZ: Asia/Bangkok
+      PUID: 1000
+      PGID: 1000
+    # user: admin:admin
+    command: --baseurl "${BASE_URL}" --username "${USERNAME}" --password "${PASSWORD}"
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.${SERVICE_NAME}.tls=true"
+        - "traefik.http.routers.${SERVICE_NAME}.entrypoints=web,websecure"
+        - "traefik.http.routers.${SERVICE_NAME}.rule=Host(`${DOMAIN}) && PathPrefix(`${BASE_URL}`)"
+        - "traefik.http.services.${SERVICE_NAME}.loadbalancer.server.port=80"
+    networks:
+      - proxy
+    volumes:
+      - ${VOLUME_MOUNT}:/srv
+
+networks:
+  proxy:
+    external: true
 ```

@@ -22,40 +22,8 @@ services:
     networks:
       - proxy
       # - proxy-overlay
-    command:
-      - --configFile=/TraefikConfigs.yaml
-      # Expose Endport listener
-      # - "--entrypoints.web.address=:80"
-      # - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      # - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      # - "--entrypoints.websecure.address=:443"
-      # - "--entrypoints.dashboard.address=:8080"
+    command: --configFile=/TraefikConfigs.yaml
 
-      # - "--global.sendAnonymousUsage"
-      # - "--global.checkNewVersion"
-      # - "--serverstransport.insecureskipverify=true"
-      # Operations
-      # - "--api.dashboard=true"
-      # - "--api.debug=true"
-      # - "--ping"
-      # - "--ping.manualrouting=true"
-
-      # Provider
-      # - "--providers.docker"
-      # - "--providers.docker.swarmmode=true" # true if use docker swarm mode
-      # - "--providers.docker.network=proxy"
-      # - "--providers.docker.exposedbydefault=false"
-      # - "--providers.docker.httpclienttimeout=3600"
-      # - "--providers.file.directory=/traefik/configs"
-      # - "--providers.file.watch=true"
-
-      # logs
-      # - "--log.level=INFO"
-      # - "--accesslog"
-      # - "--accesslog.bufferingsize=100"
-      # - "--accesslog.filepath=/var/log/traefik/access.log"
-      # - "--accesslog.fields.names.StartUTC=drop"
-      # - "--accesslog.format=json"
     labels:
       - "traefik.enable=true"
     deploy: # for swarm mod

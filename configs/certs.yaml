@@ -2,7 +2,7 @@ tls:
   stores:
     default: {}
   # certificates:
-  #   - certFile: /certs/default.crt
-  #     keyFile: /certs/default.key
+  #   - certFile: /certs/cert.pem
+  #     keyFile: /certs/key.pem
   #     stores:
   #       - default
