@@ -42,10 +42,14 @@ deploy(){
         pull_traefik
         docker stack deploy -c traefik-stack.yaml traefik
         read -p "Deploy Portainter?[y/n]" confirm
-        if [[ "$confirm" == ""  || "$confirm" == "n" ]]; then
-            exit 1
+        if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
+            deploy-portainer
         fi
-        deploy-portainer
+
+        read -p "Deploy Filebrowser?[y/n]" confirm
+        if [[ "$confirm" == "y"  || "$confirm" == "Y" ]]; then
+            deploy-filebrowser
+        fi
     fi
     exit 0
 }
@@ -165,6 +169,7 @@ echo "  config              Set config porject"
 echo "  up                  Deploy traefik with docker-compose (docker-compose.yaml)"
 echo "  deploy              Deploy traefik with swarm mode (traefik-stack.yaml)"
 echo "  deploy-portainer    Deploy portainer with swarm mode (portainer-agant-stack.yaml)"
+echo "  deploy-filebrowser    Deploy portainer with swarm mode (filebrowser-stack.yaml)"
 echo "  add                 Add new route in traefik with template (template/sample.yaml)"
 echo ""
 echo "Optional tools:"
