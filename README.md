@@ -95,8 +95,6 @@ networks:
 # SERVICE_NAME=filebrowser4traefik
 # DOMAIN=localhost
 # BASE_URL=/filebrowser4traefik
-# USERNAME=admin
-# PASSWORD=admin
 # VOLUME_MOUNT=/etc/traefik
 # PUID=1000
 # PGID=1000
@@ -104,14 +102,14 @@ networks:
 # END ENV
 version: "3.8"
 services:
-  ${SERVICE_NAME}:
+  filebrowser:
     image: filebrowser/filebrowser:latest
     environment:
       TZ: Asia/Bangkok
-      PUID: 1000
-      PGID: 1000
-    # user: admin:admin
-    command: --baseurl "${BASE_URL}" --username "${USERNAME}" --password "${PASSWORD}"
+      PUID: ${PUID}
+      PGID: ${PGID}
+    # default user: admin:admin
+    command: --baseurl "${BASE_URL}"
     deploy:
       mode: replicated
       replicas: 1
@@ -119,7 +117,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.${SERVICE_NAME}.tls=true"
         - "traefik.http.routers.${SERVICE_NAME}.entrypoints=web,websecure"
-        - "traefik.http.routers.${SERVICE_NAME}.rule=Host(`${DOMAIN}) && PathPrefix(`${BASE_URL}`)"
+        - "traefik.http.routers.${SERVICE_NAME}.rule=Host(`${DOMAIN}`) && PathPrefix(`${BASE_URL}`)"
         - "traefik.http.services.${SERVICE_NAME}.loadbalancer.server.port=80"
     networks:
       - proxy

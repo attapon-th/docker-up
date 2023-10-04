@@ -40,7 +40,7 @@ services:
     image: vegardit/traefik-logrotate:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:rw # required to send USR1 signal to Traefik after log rotation
-      - /logs:/var/log/traefik:rw # folder containing access.log file
+      - ./logs:/var/log/traefik:rw # folder containing access.log file
     deploy:
       mode: replicated
       replicas: 1
@@ -57,6 +57,6 @@ services:
       CRON_SCHEDULE: "0 0 * * *"
       CRON_LOG_LEVEL: 8 # see https://unix.stackexchange.com/a/414010/378036
       # command to determine the id of the container running Traefik:
-      TRAEFIK_CONTAINER_ID_COMMAND: docker ps --quiet --filter ancestor=traefik
+      TRAEFIK_CONTAINER_ID_COMMAND: docker ps --quiet --filter name=traefik_traefik
     networks:
       - proxy
