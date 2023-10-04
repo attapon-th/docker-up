@@ -21,6 +21,7 @@ init(){
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/portainer.yaml -o configs/portainer.yaml
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/certs.yaml -o configs/certs.yaml
     curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/template/sample.yaml -o template/sample.yaml
+    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/template/filebrowser4traefik.yaml -o template/filebrowser4traefik.yaml
     config
 }
 
