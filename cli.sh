@@ -84,6 +84,7 @@ cli-update(){
     exit 0
 }
 
+
 add(){
     test -f "./domain.txt" || (echo "Plaese run:  ${CLI} config" exit 0)
     DOMAIN=$(cat "./domain.txt")
@@ -169,7 +170,7 @@ echo "  config              Set config porject"
 echo "  up                  Deploy traefik with docker-compose (docker-compose.yaml)"
 echo "  deploy              Deploy traefik with swarm mode (traefik-stack.yaml)"
 echo "  deploy-portainer    Deploy portainer with swarm mode (portainer-agant-stack.yaml)"
-echo "  deploy-filebrowser    Deploy portainer with swarm mode (filebrowser-stack.yaml)"
+echo "  deploy-filebrowser  Create&Deploy filebrowser with swarm mode (filebrowser-stack.yaml)"
 echo "  add                 Add new route in traefik with template (template/sample.yaml)"
 echo ""
 echo "Optional tools:"
