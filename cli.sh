@@ -14,16 +14,17 @@ init(){
     mkdir -p certs
     mkdir -p template
     mkdir -p logs
-    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/TraefikConfigs.yaml -o TraefikConfigs.yaml
-    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/traefik-stack.yaml -o traefik-stack.yaml
-    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/portainer-agant-stack.yaml -o portainer-agant-stack.yaml
-    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/dashboad.yaml -o configs/dashboad.yaml
-    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/portainer.yaml -o configs/portainer.yaml
-    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/certs.yaml -o configs/certs.yaml
-    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/template/sample.yaml -o template/sample.yaml
-    curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/template/filebrowser4traefik.yaml -o template/filebrowser4traefik.yaml
+    test -f "TraefikConfigs1.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/TraefikConfigs.yaml -o TraefikConfigs.yaml
+    test -f "traefik-stack.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/traefik-stack.yaml -o traefik-stack.yaml
+    test -f "portainer-agant-stack.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/portainer-agant-stack.yaml -o portainer-agant-stack.yaml
+    test -f "configs/dashboad.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/dashboad.yaml -o configs/dashboad.yaml
+    test -f "configs/portainer.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/portainer.yaml -o configs/portainer.yaml
+    test -f "configs/certs.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/configs/certs.yaml -o configs/certs.yaml
+    test -f "template/sample.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/template/sample.yaml -o template/sample.yaml
+    test -f "template/filebrowser4traefik.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/template/filebrowser4traefik.yaml -o template/filebrowser4traefik.yaml
     config
 }
+
 
 
 pull_traefik(){
