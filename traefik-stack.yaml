@@ -10,8 +10,14 @@ services:
     environment:
       - TZ=Asia/Bangkok
     ports:
-      - 80:80 # entrypoint: web (redriect schema to (https: 443: websecure))
-      - 443:443 # entrypoint: websecure
+      - target: 80 # entrypoint: web (redriect schema to (https: 443: websecure))
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443 # entrypoint: websecure
+        published: 443
+        protocol: tcp
+        mode: host
       - 8080:8080 # entrypoint: dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
