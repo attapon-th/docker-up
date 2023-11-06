@@ -19,7 +19,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
     # default user: admin:admin
-    command: --baseurl "${BASE_URL}" --database "/srv/.filebrowser.db"
+    command: --baseurl "${BASE_URL}" --database "/srv/traefik/.filebrowser.db"
     deploy:
       mode: replicated
       replicas: 1
