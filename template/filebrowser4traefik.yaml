@@ -33,7 +33,7 @@ services:
       - proxy
     volumes:
       - ${VOLUME_MOUNT}:/srv
-      - ${VOLUME_MOUNT}:/database.db
+      - ${VOLUME_MOUNT}/filebrowser.db:/database.db
       - /var/log/traefik:/srv/log/traefik
 
 networks:
