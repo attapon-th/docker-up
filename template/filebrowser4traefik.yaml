@@ -7,7 +7,7 @@
 # BASE_URL=/filebrowser4traefik
 # VOLUME_MOUNT=/etc/traefik
 # PUID=1000
-# PGID=1000
+# PGID=0
 # --------------------------------------------
 # END ENV
 version: "3.8"
@@ -19,7 +19,7 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
     # default user: admin:admin
-    command: --baseurl "${BASE_URL}"
+    command: --baseurl "${BASE_URL}" --database "/srv/.filebrowser.db"
     deploy:
       mode: replicated
       replicas: 1
@@ -33,7 +33,6 @@ services:
       - proxy
     volumes:
       - ${VOLUME_MOUNT}:/srv
-      - ${VOLUME_MOUNT}/filebrowser.db:/database.db
       - /var/log/traefik:/srv/log/traefik
 
 networks:
