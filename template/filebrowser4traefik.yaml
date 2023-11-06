@@ -32,7 +32,7 @@ services:
     networks:
       - proxy
     volumes:
-      - ${VOLUME_MOUNT}:/srv
+      - ${VOLUME_MOUNT}:/srv/traefik
       - /var/log/traefik:/srv/log/traefik
 
 networks:
