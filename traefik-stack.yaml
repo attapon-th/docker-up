@@ -18,12 +18,15 @@ services:
         published: 443
         protocol: tcp
         mode: host
-      - 8080:8080 # entrypoint: dashboard
+      - target: 8080 # entrypoint: websecure
+        published: 8080
+        protocol: tcp
+        mode: host # entrypoint: dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./configs/:/traefik/configs/
       - ./certs/:/certs/
-      - ./logs:/var/log/traefik/
+      - /var/log/traefik/:/var/log/traefik/
       - ./TraefikConfigs.yaml:/TraefikConfigs.yaml
     networks:
       - proxy
@@ -46,7 +49,7 @@ services:
     image: vegardit/traefik-logrotate:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:rw # required to send USR1 signal to Traefik after log rotation
-      - ./logs:/var/log/traefik:rw # folder containing access.log file
+      - /var/log/traefik/:/var/log/traefik:rw # folder containing access.log file
     deploy:
       mode: replicated
       replicas: 1
