@@ -34,7 +34,7 @@ services:
     volumes:
       - ${VOLUME_MOUNT}:/srv
       - ${VOLUME_MOUNT}:/database/filebrowser.db
-      - var/log/traefik:/srv/log/traefik
+      - /var/log/traefik:/srv/log/traefik
 
 networks:
   proxy:

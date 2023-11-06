@@ -144,7 +144,7 @@ env(){
     BASE_URL=/filebrowser4traefik
     VOLUME_MOUNT=$(pwd)
     PUID=$(id -u)
-    PGID=$(id -g)
+    PGID=0
     echo "DOMAIN: ${DOMAIN}"
     echo "BASE_URL: ${BASE_URL}"
     echo "VOLUME_MOUNT: ${VOLUME_MOUNT}"
@@ -158,7 +158,7 @@ deploy-filebrowser(){
     BASE_URL=/filebrowser4traefik\
     VOLUME_MOUNT=$(pwd)\
     PUID=$(id -u)\
-    PGID=$(id -g)\
+    PGID=0\
     docker compose -f template/filebrowser4traefik.yaml config > filebrowser-stack.yaml
     echo "# $(cat filebrowser-stack.yaml)" > filebrowser-stack.yaml
     echo "Start deploy filebrowser-stack.yaml"
