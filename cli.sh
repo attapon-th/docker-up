@@ -13,7 +13,6 @@ init(){
     mkdir -p configs
     mkdir -p certs
     mkdir -p template
-    mkdir -p logs
     echo "Load: TraefikConfigs.yaml"
     test -f "TraefikConfigs.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/TraefikConfigs.yaml -o TraefikConfigs.yaml
     echo "Load: traefik-stack.yaml"
@@ -30,7 +29,9 @@ init(){
     test -f "template/sample.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/template/sample.yaml -o template/sample.yaml
     echo "Load: template/filebrowser4traefik.yaml"
     test -f "template/filebrowser4traefik.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/template/filebrowser4traefik.yaml -o template/filebrowser4traefik.yaml
+    
     config
+    mkdir -p /var/log/traefik/ || echo "Plaese Run: sudo mkdir -p /var/log/traefik/"
 }
 
 
