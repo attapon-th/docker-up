@@ -14,8 +14,8 @@ init(){
     mkdir -p certs
     mkdir -p template
     mkdir -p logs
-    echo "Load: TraefikConfigs1.yaml"
-    test -f "TraefikConfigs1.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/TraefikConfigs.yaml -o TraefikConfigs.yaml
+    echo "Load: TraefikConfigs.yaml"
+    test -f "TraefikConfigs.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/TraefikConfigs.yaml -o TraefikConfigs.yaml
     echo "Load: traefik-stack.yaml"
     test -f "traefik-stack.yaml" || curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/traefik-stack.yaml -o traefik-stack.yaml
     echo "Load: portainer-agant-stack.yaml"
