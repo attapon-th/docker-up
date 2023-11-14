@@ -76,7 +76,7 @@ deploy-portainer(){
 config(){
     docker network create --attachable --driver=overlay proxy || echo "docker network with name 'proxy' already exists"
     echo "Setup treafik domain config"
-    DOMAIN=$(cat "./domain.txt")
+    DOMAIN=$(cat "./domain.txt" || echo "localhost")
     read -p "Domain or IP (default: ${DOMAIN}): " DOMAIN 
     test -n "${DOMAIN}" || DOMAIN=$(cat "./domain.txt")
     echo "Your server is domain: ${DOMAIN}"
