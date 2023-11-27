@@ -1,5 +1,4 @@
-The MIT License (MIT)
-
+/*
 Copyright © 2023 Attapon.TH <attapon.4work@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,3 +18,31 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+*/
+package cmd
+
+import (
+	"traefik-helper/services"
+
+	"github.com/spf13/cobra"
+)
+
+// initCmd represents the init command
+var initCmd = &cobra.Command{
+	Use:   "init",
+	Short: "",
+	Long:  ``,
+	Run: func(cmd *cobra.Command, args []string) {
+		services.Initialize()
+		services.UpdateDynamicConfigs()
+		services.UpdateStaticConfigs()
+		services.ForceWriteConfigs()
+		services.ForceWriteDynamicConfig()
+		services.ForceWriteStaticConfig()
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(initCmd)
+
+}

@@ -1,0 +1,108 @@
+vars:
+  entryPoints: # mapper expose port in mode: host
+    web: 80
+    websecure: 443
+    dashboard: 8080
+  domain: localhost
+  tls: false
+  certFile: ./certs/cert.pem
+  keyFile: ./certs/key.pem
+  accessLogFilePath: /var/log/traefik/access.log # required root permission
+  staticConfigsFile: traefik-static-configs.yaml
+  dynamicConfigsFile: configs/dynamic-configs.yaml # required file in directory
+
+traefikStatic:
+  global:
+    checkNewVersion: false
+    sendAnonymousUsage: false
+
+  serversTransport:
+    insecureSkipVerify: true
+
+  entryPoints:
+    # web:
+    #   address: ":80"
+    #   http:
+    #     redirections:
+    #       entryPoint:
+    #         to: websecure
+    #         scheme: https
+    # websecure:
+    #   address: ":443"
+    # dashboard:
+    #   address: ":8080"
+    metrics:
+      address: :8082
+
+  providers:
+    docker:
+      watch: true
+      network: proxy
+      swarmMode: true
+      swarmModeRefreshSeconds: 30s
+      httpClientTimeout: 60s
+      exposedByDefault: false
+    file:
+      directory: /traefik/configs
+      watch: true
+
+  api:
+    insecure: false
+    dashboard: true
+    debug: true
+    disabledashboardad: false
+
+  ping:
+    manualRouting: true
+
+  metrics:
+    prometheus:
+      entryPoint: metrics
+
+  log:
+    level: INFO
+    format: common
+  accessLog:
+    filePath: /var/log/traefik/access.log
+    format: json
+    bufferingSize: 100
+    fields:
+      defaultMode: keep
+      names:
+        StartUTC: drop
+
+traefikDynamic:
+  # tls:
+  #   stores:
+  #     default: ""
+  # certificates:
+  #   - certFile: /certs/cert.pem
+  #     keyFile: /certs/key.pem
+  #     stores:
+  #       - default
+  http:
+    routers:
+      ping_router:
+        rule: Host(`{{DOMAIN}}`) && Path(`/ping`)
+        service: ping@internal
+        entryPoints:
+          - web
+          - websecure
+          - dashboard
+        middlewares:
+        tls: true
+
+      dashboard_router:
+        rule: Host(`{{DOMAIN}}`) && PathPrefix(`/dashboard`, `/api`)
+        service: api@internal
+        entryPoints:
+          - dashboard
+        middlewares:
+          - auth_dashboard
+        tls: true
+
+    middlewares:
+      auth_dashboard:
+        basicAuth:
+          users:
+            - admin:$2y$10$e6UC/SC9sQk7H1Vpgd1sQ.3grBrJ.IeasfgTpYhOD20Bwlq1ICH.W

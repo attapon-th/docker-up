@@ -3,4 +3,6 @@
 /domain.txt
 /cli
 /test
-filebrowser-stack.yaml
+/.traefik-helper.yaml
+
+# /configs/*

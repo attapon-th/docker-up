@@ -1,0 +1,30 @@
+# https://taskfile.dev
+
+version: "3"
+
+env:
+  DEFAULT_CONFIGS:
+    sh: cat ./default-traefik-helper.yaml || echo ""
+
+vars:
+  DEFAULT_CONFIGS:
+    sh: cat ./default-traefik-helper.yaml || echo ""
+  GO_LDFLAGS: -s -w -X 'traefik-helper/cmd.DefaultConfigYAML=${DEFAULT_CONFIGS}'
+
+tasks:
+  default:
+    cmds:
+      - task --list-all
+    silent: true
+
+  dev:
+    cmds:
+      - (test -f ./.traefik-helper.yaml && rm -f ./.traefik-helper.yaml) || echo ""
+      - go run -ldflags="{{.GO_LDFLAGS}}" main.go init
+
+  mod:
+    - go mod tidy
+
+  pp:
+    cmds:
+      - go run -ldflags="{{.GO_LDFLAGS}}" main.go show-config

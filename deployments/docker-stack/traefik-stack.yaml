@@ -1,37 +1,25 @@
 version: "3.8"
 
-networks:
-  proxy:
-    external: true
-
 services:
   traefik:
     image: traefik:latest
     environment:
       - TZ=Asia/Bangkok
     ports:
-      - target: 80 # entrypoint: web (redriect schema to (https: 443: websecure))
+      - target: 80
         published: 80
         protocol: tcp
         mode: host
-      - target: 443 # entrypoint: websecure
-        published: 443
-        protocol: tcp
-        mode: host
-      - target: 8080 # entrypoint: websecure
-        published: 8080
-        protocol: tcp
-        mode: host # entrypoint: dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./configs/:/traefik/configs/
-      - ./certs/:/certs/
-      - /var/log/traefik/:/var/log/traefik/
-      - ./TraefikConfigs.yaml:/TraefikConfigs.yaml
+      # - ./configs/:/traefik/configs/
+      # - ./certs/:/certs/
+      # - /var/log/traefik/:/var/log/traefik/
+      # - ./TraefikConfigs.yaml:/traefik-configs.yaml
     networks:
       - proxy
       # - proxy-overlay
-    command: --configFile=/TraefikConfigs.yaml
+    # command: --configFile=/TraefikConfigs.yaml
 
     labels:
       - "traefik.enable=true"
@@ -67,5 +55,7 @@ services:
       CRON_LOG_LEVEL: 8 # see https://unix.stackexchange.com/a/414010/378036
       # command to determine the id of the container running Traefik:
       TRAEFIK_CONTAINER_ID_COMMAND: docker ps --quiet --filter name=traefik_traefik
-    networks:
-      - proxy
+
+networks:
+  proxy:
+    external: true
