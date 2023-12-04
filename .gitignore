@@ -6,3 +6,5 @@
 /.traefik-helper.yaml
 
 # /configs/*
+/.vscode
+/Taskfile.*

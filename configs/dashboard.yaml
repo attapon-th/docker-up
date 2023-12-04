@@ -1,0 +1,32 @@
+tls:
+    certificates:
+        - certFile: /certs/cert.pem
+          keyFile: /certs/key.pem
+          stores:
+              - default
+
+http:
+    routers:
+        dashboard_router:
+            entrypoints:
+                - dashboard
+            middlewares:
+                - auth_dashboard
+            rule: Host(`localhost`) && PathPrefix(`/dashboard`, `/api`)
+            service: api@internal
+            tls: true
+
+        ping_router:
+            entrypoints:
+                - web
+                - websecure
+                - dashboard
+            rule: Host(`localhost`) && Path(`/ping`)
+            service: ping@internal
+            tls: true
+
+    middlewares:
+        auth_dashboard:
+            basicauth:
+                users:
+                    - admin:$2y$10$e6UC/SC9sQk7H1Vpgd1sQ.3grBrJ.IeasfgTpYhOD20Bwlq1ICH.W # admin:admin

@@ -1,130 +1,61 @@
-# Traefik setup for docker swarm mode
+# Treafik Setup Helper
 
-Can use:
+## Prerequisites
 
-- docker stack deploy
-- docker compose
-- docker run
+1. Install docker
 
+2. Init docker swarm
+    ```bash
+    docker swarm init
+    # or
+    docker swarm init --advertise-addr 127.0.0.1
+    ```
+3. Create docker network name `proxy`
 
-## Requirement
+    ```bash
+    docker network create --attachable --driver overlay proxy
+    ```
 
-- Docker - [Installation](https://docs.docker.com/engine/install/)
+## Deploy 
 
-- Docker Compose - [Release Page](https://github.com/docker/compose/releases)
-
-## How to
-
-1. Create directory project
-
-  ```shell
-  mkdir -p ~/traefik
-  cd ~/traefik
-  ```
-
-2. Download cli helper
-  ```shell
-  curl -SL https://raw.githubusercontent.com/attapon-th/traefik-setup/main/cli.sh -o ./cli \
-  && chmod +x ./cli
-  ```
-
-  test use:
-  ```raw
-  ./cli
-  Commands: 
-      init                Init project and set configulation
-      config              Set config porject
-      deploy              Stack deploy (traefik and portainer) in swarm mode
-      add                 Add new route in traefik with template(./template/sample.yaml)
-  ```
-
-3. Start Docker Swarm Mode
-
-  ```shell
-  docker swarm init
-  ```
-
-4. Init traefik `init` and `deploy` traefik
-
-  ```shell
-  ./cli init
-  ./cli deploy
-  ```
-
-## Default URL
- - `https://__DOMAIN__/portainer`
- - `https://__DOMAIN__:8080/dashboard`
- - `https://__DOMAIN__:8080/ping`
- - `https://__DOMAIN__/ping`
+> deploy `traefik` and `portainer`
+> 
+> expose default port: `80`, `443` and `8080`
+> 
 
 
-## Use Traefik in another Docker stack
+1. Clone the repository
+    ```bash
+    git clone https://github.com/attapon-th/traefik-setup.git traefik
+    ```
 
-```yaml
-# ----- ENV required -------
-# SERVICE_NAME=
-# SERVICE_PORT=
-# DOMAIN=
-# PREFIX=
-# --------------------------
-version: "3.8"
-services:
-  ${SERVICE_NAME}:
-    imange: ...
-    deploy:
-      mode: replicated
-      replicas: 1
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.${SERVICE_NAME}.tls=true"
-        - "traefik.http.routers.${SERVICE_NAME}.rule=Host(`${DOMAIN:-localhost}`) && PathPrefix(`${PREFIX:-/}`)"
-        - "traefik.http.routers.${SERVICE_NAME}.entryPoints=web,websecure"
-        - "traefik.http.services.${SERVICE_NAME}.loadbalancer.server.port=${SERVICE_PORT:-80}"
-    networks:
-      - proxy
+2. Go to the directory
+    ```bash
+    cd traefik
+    ```
 
-networks:
-  proxy:
-    external: true
-```
+4. Create Logs folder (required `sudo`)
+    ```bash
+    sudo mkdir /var/log/traefik
+    ```
 
-## ADD service filebrowser for edit config traefik
-```yaml
-# ENV required
-# --------------------------------------------
-# SERVICE_NAME=filebrowser4traefik
-# DOMAIN=localhost
-# BASE_URL=/filebrowser4traefik
-# VOLUME_MOUNT=/etc/traefik
-# PUID=1000
-# PGID=1000
-# --------------------------------------------
-# END ENV
-version: "3.8"
-services:
-  filebrowser:
-    image: filebrowser/filebrowser:latest
-    environment:
-      TZ: Asia/Bangkok
-      PUID: ${PUID}
-      PGID: ${PGID}
-    # default user: admin:admin
-    command: --baseurl "${BASE_URL}"
-    deploy:
-      mode: replicated
-      replicas: 1
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.${SERVICE_NAME}.tls=true"
-        - "traefik.http.routers.${SERVICE_NAME}.entrypoints=web,websecure"
-        - "traefik.http.routers.${SERVICE_NAME}.rule=Host(`${DOMAIN}`) && PathPrefix(`${BASE_URL}`)"
-        - "traefik.http.services.${SERVICE_NAME}.loadbalancer.server.port=80"
-    networks:
-      - proxy
-    volumes:
-      - ${VOLUME_MOUNT}:/srv
+3. run docker stack 
 
-networks:
-  proxy:
-    external: true
-```
+    > edit: `vi docker/traefik-stack.yml`
+    > 
+    ```bash
+    docker stack deploy -c docker/traefik-stack.yml traefik
+    ```
+
+4. run portainer
+
+    ```bash
+    docker stack deploy -c docker/portainer-stack.yml portainer
+    ```
+
+
+## Using Default setup
+
+>  Portainer: [https://localhost/portainer](https://localhost/portainer)
+>
+> Traefik Dashboard: [https://localhost:8080/dashboard](https://localhost:8080/dashboard)

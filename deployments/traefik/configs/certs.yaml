@@ -1,8 +1,0 @@
-tls:
-  stores:
-    default: {}
-  # certificates:
-  #   - certFile: /certs/cert.pem
-  #     keyFile: /certs/key.pem
-  #     stores:
-  #       - default

@@ -1,7 +1,7 @@
 http:
   routers:
     portainer:
-      rule: Host(`__DOMAIN__`) && PathPrefix(`/portainer`)
+      rule: Host(`localhost`) && PathPrefix(`/portainer`)
 
       service: portainer
       entryPoints:
