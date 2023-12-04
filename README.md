@@ -34,12 +34,17 @@
     cd traefik
     ```
 
-4. Create Logs folder (required `sudo`)
+3. Create Logs folder (required `sudo`)
     ```bash
     sudo mkdir /var/log/traefik
     ```
 
-3. run docker stack 
+4. Gen Self-Signed for traefik
+    ```bash
+    ./gen-cert.sh
+    ```
+
+5. run docker stack 
 
     > edit: `vi docker/traefik-stack.yml`
     > 
@@ -47,7 +52,7 @@
     docker stack deploy -c docker/traefik-stack.yml traefik
     ```
 
-4. run portainer
+6. run portainer
 
     ```bash
     docker stack deploy -c docker/portainer-stack.yml portainer
