@@ -49,13 +49,13 @@
     > edit: `vi docker/traefik-stack.yml`
     > 
     ```bash
-    docker stack deploy -c docker/traefik-stack.yaml traefik
+    docker stack deploy -c traefik-stack.yaml traefik
     ```
 
 6. run portainer
 
     ```bash
-    docker stack deploy -c docker/portainer-stack.yaml portainer
+    docker stack deploy -c portainer-stack.yaml portainer
     ```
 
 
